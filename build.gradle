@@ -19,6 +19,10 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.telegram:telegrambots-longpolling:7.3.0'
+    implementation 'org.telegram:telegrambots-client:7.3.0'
+
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
