@@ -1,6 +1,8 @@
 package org.example.deepshuffle.handler;
 
 import lombok.RequiredArgsConstructor;
+import org.example.deepshuffle.model.CommandContext;
+import org.example.deepshuffle.parser.CommandParser;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -12,6 +14,8 @@ public class CommandRouter {
 
     private final List<CommandHandler> handlers;
 
+    private final CommandParser commandParser;
+
     public void route(Update update){
 
         if(!update.hasMessage()){
@@ -20,10 +24,12 @@ public class CommandRouter {
 
         String text = update.getMessage().getText();
 
-        for (CommandHandler handler : handlers){
-            if (handler.supports(text)){
+        CommandContext commandContext = commandParser.parse(text);
 
-                handler.handle(update);
+        for (CommandHandler handler : handlers){
+            if (handler.supports(commandContext.command())){
+
+                handler.handle(update, commandContext);
 
                 return;
             }
