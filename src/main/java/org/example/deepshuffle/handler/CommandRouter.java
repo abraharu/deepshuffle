@@ -2,7 +2,6 @@ package org.example.deepshuffle.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
@@ -11,17 +10,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommandRouter {
 
-    List<CommandHandler> handlers;
+    private final List<CommandHandler> handlers;
 
     public void route(Update update){
-        if (update.hasMessage()){
+
+        if(!update.hasMessage()){
             return;
         }
 
         String text = update.getMessage().getText();
 
         for (CommandHandler handler : handlers){
-            if (handler.handle(text)){
+            if (handler.supports(text)){
 
                 handler.handle(update);
 
