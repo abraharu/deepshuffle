@@ -11,13 +11,11 @@ public class CommandParser {
 
     public CommandContext parse(String message){
 
-        String[] parts = message.split(" ");
+        List<String> parts = Arrays.stream(message.trim().split("\\s+")).filter(s -> !s.isEmpty()).toList();
 
-        String command = parts[0];
+        String command = parts.getFirst();
 
-        List<String> arguments = Arrays.stream(parts)
-                                        .skip(1)
-                                        .toList();
+        List<String> arguments = parts.stream().skip(1).toList();
 
         return new CommandContext(command, arguments);
     }
