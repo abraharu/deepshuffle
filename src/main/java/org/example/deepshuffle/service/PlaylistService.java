@@ -26,6 +26,4 @@ public class PlaylistService {
 
         return playlist.get(ThreadLocalRandom.current().nextInt(playlist.size())).getName();
     }
-
-
 }
