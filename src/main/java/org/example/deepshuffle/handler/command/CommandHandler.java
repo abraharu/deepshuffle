@@ -1,4 +1,4 @@
-package org.example.deepshuffle.handler;
+package org.example.deepshuffle.handler.command;
 
 import org.example.deepshuffle.model.CommandContext;
 import org.telegram.telegrambots.meta.api.objects.Update;

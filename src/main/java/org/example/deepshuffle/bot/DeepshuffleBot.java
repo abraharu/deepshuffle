@@ -1,16 +1,14 @@
 package org.example.deepshuffle.bot;
 
 import lombok.RequiredArgsConstructor;
-import org.example.deepshuffle.handler.CommandRouter;
-import org.springframework.beans.factory.annotation.Value;
+import okhttp3.Call;
+import okhttp3.Callback;
+import org.example.deepshuffle.handler.callback.CallbackRouter;
+import org.example.deepshuffle.handler.command.CommandRouter;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
-import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
@@ -20,10 +18,21 @@ public class DeepshuffleBot implements LongPollingUpdateConsumer {
 
     private final CommandRouter commandRouter;
 
+    private final CallbackRouter callbackRouter;
+
     @Override
     public void consume(List<Update> updates) {
         for (Update update : updates) {
-          commandRouter.route(update);
+
+            if(update.hasCallbackQuery()){
+                callbackRouter.route(update);
+
+                continue;
+            }
+
+            if (update.hasMessage()){
+                commandRouter.route(update);
+            }
         }
     }
 }

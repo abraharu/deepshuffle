@@ -1,25 +1,35 @@
 package org.example.deepshuffle.factory;
 
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-
-import java.util.List;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 @Component
 public class MainMenuKeyboardFactory {
 
-    public ReplyKeyboardMarkup create(){
+    public InlineKeyboardMarkup create(){
 
-        KeyboardRow row1 = new KeyboardRow();
-        row1.add("Shuffle");
+        InlineKeyboardButton shuffleButon = InlineKeyboardButton.builder()
+                .text("Shuffle")
+                .callbackData("shuffle")
+                .build();
 
-        KeyboardRow row2 = new KeyboardRow();
-        row2.add("Random Genre");
 
-        return ReplyKeyboardMarkup.builder()
-                .keyboard(List.of(row1, row2))
-                .resizeKeyboard(true)
+        InlineKeyboardButton genreButton = InlineKeyboardButton.builder()
+                .text("Random Genre")
+                .callbackData("random_genre")
+                .build();
+
+       InlineKeyboardRow row1 = new InlineKeyboardRow();
+       row1.add(shuffleButon);
+
+        InlineKeyboardRow row2 = new InlineKeyboardRow();
+        row2.add(genreButton);
+
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(row1)
+                .keyboardRow(row2)
                 .build();
 
     }

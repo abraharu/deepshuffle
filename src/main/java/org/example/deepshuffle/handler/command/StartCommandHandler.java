@@ -1,9 +1,8 @@
-package org.example.deepshuffle.handler;
+package org.example.deepshuffle.handler.command;
 
 import lombok.RequiredArgsConstructor;
 import org.example.deepshuffle.factory.MainMenuKeyboardFactory;
 import org.example.deepshuffle.model.CommandContext;
-import org.example.deepshuffle.service.ShuffleDiscoveryService;
 import org.example.deepshuffle.service.TelegramMessageService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;

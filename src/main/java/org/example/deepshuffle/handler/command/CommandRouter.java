@@ -1,4 +1,4 @@
-package org.example.deepshuffle.handler;
+package org.example.deepshuffle.handler.command;
 
 import lombok.RequiredArgsConstructor;
 import org.example.deepshuffle.model.CommandContext;

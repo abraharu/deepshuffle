@@ -32,9 +32,25 @@ public class ShuffleDiscoveryService {
             "1"
     );
 
-    public Playlist discoverRandomPlaylist(){
 
-        String randomTerm = RANDOM_TERMS.get((int) (Math.random() * RANDOM_TERMS.size()));
+    public Playlist discoverRandomPlaylist() {
+
+        for (int i = 0; i < 5; i++) {
+
+            Playlist playlist = tryDiscoverRandomPlaylist();
+
+            if (playlist != null) {
+
+                return playlist;
+            }
+        }
+
+        return null;
+    }
+
+    private Playlist tryDiscoverRandomPlaylist(){
+
+        String randomTerm = RANDOM_TERMS.get(ThreadLocalRandom.current().nextInt(RANDOM_TERMS.size()));
 
         int randomOffset = ThreadLocalRandom.current().nextInt(0, 100);
 
