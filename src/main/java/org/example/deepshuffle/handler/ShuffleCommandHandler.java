@@ -7,6 +7,11 @@ import org.example.deepshuffle.service.TelegramMessageService;
 import org.example.deepshuffle.spotify.dto.Playlist;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -39,6 +44,21 @@ public class ShuffleCommandHandler implements CommandHandler{
                 %s
                 """.formatted(playlist.name(), playlist.owner(), playlist.url());
 
-        messageService.sendMessage(update.getMessage().getChatId(), response);
+        InlineKeyboardButton openButton = InlineKeyboardButton.builder()
+                  .text("OpenSpotify")
+                  .url(playlist.url())
+                  .build();
+
+        InlineKeyboardRow row =
+                new InlineKeyboardRow();
+
+        row.add(openButton);
+
+        InlineKeyboardMarkup markup = InlineKeyboardMarkup.builder()
+                        .keyboardRow(row)
+                        .build();
+
+
+        messageService.sendMessage(update.getMessage().getChatId(), response, markup);
     }
 }
