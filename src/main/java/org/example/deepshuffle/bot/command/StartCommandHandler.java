@@ -2,7 +2,7 @@ package org.example.deepshuffle.bot.command;
 
 import lombok.RequiredArgsConstructor;
 import org.example.deepshuffle.bot.keyboard.MainMenuKeyboardFactory;
-import org.example.deepshuffle.bot.telegram.TelegramMessageService;
+import org.example.deepshuffle.service.TelegramMessageService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

@@ -1,7 +1,7 @@
 package org.example.deepshuffle.spotify.auth.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.deepshuffle.spotify.auth.service.SpotifyOAuthService;
+import org.example.deepshuffle.service.SpotifyOAuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

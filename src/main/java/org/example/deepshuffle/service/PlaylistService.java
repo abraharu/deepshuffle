@@ -1,4 +1,4 @@
-package org.example.deepshuffle.spotify.discovery;
+package org.example.deepshuffle.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.deepshuffle.spotify.client.SpotifyClient;

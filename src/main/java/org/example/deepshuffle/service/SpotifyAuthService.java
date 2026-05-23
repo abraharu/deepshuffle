@@ -1,4 +1,4 @@
-package org.example.deepshuffle.spotify.client;
+package org.example.deepshuffle.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

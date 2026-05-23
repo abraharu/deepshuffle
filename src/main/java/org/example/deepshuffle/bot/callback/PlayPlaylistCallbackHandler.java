@@ -2,10 +2,10 @@ package org.example.deepshuffle.bot.callback;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.deepshuffle.bot.telegram.TelegramMessageService;
+import org.example.deepshuffle.service.SpotifyOAuthService;
+import org.example.deepshuffle.service.SpotifyPlaybackService;
+import org.example.deepshuffle.service.TelegramMessageService;
 import org.example.deepshuffle.spotify.auth.exception.SpotifyAuthorizationRequiredException;
-import org.example.deepshuffle.spotify.auth.service.SpotifyOAuthService;
-import org.example.deepshuffle.spotify.playback.SpotifyPlaybackService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

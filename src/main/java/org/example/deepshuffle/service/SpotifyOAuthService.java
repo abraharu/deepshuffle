@@ -1,4 +1,4 @@
-package org.example.deepshuffle.spotify.auth.service;
+package org.example.deepshuffle.service;
 
 import org.example.deepshuffle.spotify.auth.dto.SpotifyMeResponse;
 import org.example.deepshuffle.spotify.auth.dto.SpotifyTokenPayload;

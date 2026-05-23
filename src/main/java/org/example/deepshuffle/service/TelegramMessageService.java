@@ -1,4 +1,4 @@
-package org.example.deepshuffle.bot.telegram;
+package org.example.deepshuffle.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

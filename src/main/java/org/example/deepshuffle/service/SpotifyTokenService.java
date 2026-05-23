@@ -1,4 +1,4 @@
-package org.example.deepshuffle.spotify.auth.service;
+package org.example.deepshuffle.service;
 
 import org.example.deepshuffle.persistence.entity.SpotifyUserTokenEntity;
 import org.example.deepshuffle.persistence.repository.SpotifyUserTokenRepository;

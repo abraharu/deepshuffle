@@ -1,7 +1,8 @@
-package org.example.deepshuffle.spotify.playback;
+package org.example.deepshuffle.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.deepshuffle.spotify.auth.service.SpotifyTokenService;
+import org.example.deepshuffle.spotify.playback.SpotifyDevice;
+import org.example.deepshuffle.spotify.playback.SpotifyDevicesResponse;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
