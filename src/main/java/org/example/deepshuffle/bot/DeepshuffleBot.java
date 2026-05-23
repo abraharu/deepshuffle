@@ -1,11 +1,8 @@
 package org.example.deepshuffle.bot;
 
 import lombok.RequiredArgsConstructor;
-import okhttp3.Call;
-import okhttp3.Callback;
-import org.example.deepshuffle.handler.callback.CallbackRouter;
-import org.example.deepshuffle.handler.command.CommandRouter;
-import org.springframework.cache.annotation.Cacheable;
+import org.example.deepshuffle.bot.callback.CallbackRouter;
+import org.example.deepshuffle.bot.command.CommandRouter;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
 import org.telegram.telegrambots.meta.api.objects.Update;

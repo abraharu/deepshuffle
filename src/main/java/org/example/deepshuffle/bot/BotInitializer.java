@@ -5,6 +5,7 @@ import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 
 @Component
@@ -20,6 +21,10 @@ public class BotInitializer {
 
     @PostConstruct
     public void init() {
+        if (!StringUtils.hasText(token)) {
+            return;
+        }
+
         try {
             this.app = new TelegramBotsLongPollingApplication();
             app.registerBot(token, bot);
