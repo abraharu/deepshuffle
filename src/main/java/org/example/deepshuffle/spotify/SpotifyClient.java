@@ -6,8 +6,10 @@ import org.springframework.stereotype.Component;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
+import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -54,6 +56,30 @@ public class SpotifyClient {
         } catch (Exception e) {
             log.error("Error searching playlists: {}", e.getMessage());
             throw new RuntimeException(e);
+        }
+    }
+
+    public List<PlaylistTrack> getPlaylistsTrack(String playlistId) {
+
+        try {
+
+            spotifyApi.setAccessToken(spotifyAuthService.getAccessToken());
+
+            Paging<PlaylistTrack> tracks = spotifyApi.getPlaylistsItems(playlistId)
+                            .limit(50)
+                            .build()
+                            .execute();
+
+            return Arrays.asList(tracks.getItems());
+
+        } catch (Exception e) {
+            log.warn(
+                    "Failed to fetch playlist tracks for playlist {}: {}",
+                    playlistId,
+                    e.getMessage()
+            );
+
+            return Collections.emptyList();
         }
     }
 }
