@@ -6,6 +6,7 @@ import org.example.deepshuffle.service.SpotifyOAuthService;
 import org.example.deepshuffle.service.SpotifyPlaybackService;
 import org.example.deepshuffle.service.TelegramMessageService;
 import org.example.deepshuffle.spotify.auth.exception.SpotifyAuthorizationRequiredException;
+import org.example.deepshuffle.spotify.auth.exception.SpotifyPlaybackException;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -32,14 +33,17 @@ public class PlayPlaylistCallbackHandler implements CallbackHandler {
         String playlistId = update.getCallbackQuery().getData().substring(CALLBACK_PREFIX.length());
 
         try {
+            messageService.answerCallback(update.getCallbackQuery().getId(), "Starting Spotify playback");
             String message = playbackService.playPlaylist(telegramUserId, playlistId);
             messageService.sendMessage(chatId, message);
         } catch (SpotifyAuthorizationRequiredException e) {
             String loginUrl = oauthService.generateLoginUrl(telegramUserId);
             messageService.sendMessage(chatId, "Connect Spotify first:\n" + loginUrl);
+        } catch (SpotifyPlaybackException e) {
+            messageService.sendMessage(chatId, e.getMessage());
         } catch (Exception e) {
             log.warn("Failed to start Spotify playback for Telegram user {}: {}", telegramUserId, e.getMessage());
-            messageService.sendMessage(chatId, "Could not start Spotify playback: " + e.getMessage());
+            messageService.sendMessage(chatId, "Could not start Spotify playback");
         }
     }
 }

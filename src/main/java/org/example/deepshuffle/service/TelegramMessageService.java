@@ -1,14 +1,17 @@
 package org.example.deepshuffle.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
+@Slf4j
 public class TelegramMessageService {
     private final OkHttpTelegramClient client;
 
@@ -54,6 +57,19 @@ public class TelegramMessageService {
             client.execute(message);
         } catch (TelegramApiException e){
             throw new RuntimeException(e);
+        }
+    }
+
+    public void answerCallback(String callbackQueryId, String text) {
+        AnswerCallbackQuery answer = AnswerCallbackQuery.builder()
+                .callbackQueryId(callbackQueryId)
+                .text(text)
+                .build();
+
+        try {
+            client.execute(answer);
+        } catch (TelegramApiException e) {
+            log.warn("Failed to answer Telegram callback query {}: {}", callbackQueryId, e.getMessage());
         }
     }
 }
