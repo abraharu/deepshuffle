@@ -21,15 +21,24 @@ public class MainMenuKeyboardFactory {
                 .callbackData("random_genre")
                 .build();
 
+        InlineKeyboardButton tasteButton = InlineKeyboardButton.builder()
+                .text("Sync Taste")
+                .callbackData("sync_taste")
+                .build();
+
        InlineKeyboardRow row1 = new InlineKeyboardRow();
        row1.add(shuffleButon);
 
         InlineKeyboardRow row2 = new InlineKeyboardRow();
         row2.add(genreButton);
 
+        InlineKeyboardRow row3 = new InlineKeyboardRow();
+        row3.add(tasteButton);
+
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(row1)
                 .keyboardRow(row2)
+                .keyboardRow(row3)
                 .build();
 
     }

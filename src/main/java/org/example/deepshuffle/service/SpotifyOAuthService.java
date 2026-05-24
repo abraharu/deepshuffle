@@ -24,7 +24,9 @@ public class SpotifyOAuthService {
     private static final String SCOPES = String.join(" ",
             "user-modify-playback-state",
             "user-read-playback-state",
-            "user-read-currently-playing"
+            "user-read-currently-playing",
+            "user-top-read",
+            "user-library-read"
     );
 
     private final WebClient webClient;
