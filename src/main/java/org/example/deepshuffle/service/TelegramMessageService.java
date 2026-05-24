@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -42,6 +43,21 @@ public class TelegramMessageService {
         try {
             client.execute(message);
         } catch (TelegramApiException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void editMessage(Long chatId, Integer messageId, String text, InlineKeyboardMarkup markup) {
+        EditMessageText message = EditMessageText.builder()
+                .chatId(chatId)
+                .messageId(messageId)
+                .text(text)
+                .replyMarkup(markup)
+                .build();
+
+        try {
+            client.execute(message);
+        } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
     }
