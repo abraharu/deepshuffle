@@ -40,6 +40,10 @@ public class SpotifyClient {
     }
 
     public List<PlaylistSimplified> searchPlaylists(String query, int offset) {
+        return searchPlaylists(query, offset, 10);
+    }
+
+    public List<PlaylistSimplified> searchPlaylists(String query, int offset, int limit) {
 
         try {
             String accessToken = spotifyAuthService.getAccessToken();
@@ -47,7 +51,7 @@ public class SpotifyClient {
             spotifyApi.setAccessToken(accessToken);
 
             Paging<PlaylistSimplified> playlists = spotifyApi.searchPlaylists(query)
-                    .limit(10)
+                    .limit(limit)
                     .offset(offset)
                     .build()
                     .execute();

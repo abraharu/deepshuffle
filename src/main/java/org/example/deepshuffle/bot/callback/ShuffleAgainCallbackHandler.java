@@ -1,8 +1,8 @@
 package org.example.deepshuffle.bot.callback;
 
 import lombok.RequiredArgsConstructor;
-import org.example.deepshuffle.service.ShuffleDiscoveryService;
 import org.example.deepshuffle.service.TelegramMessageService;
+import org.example.deepshuffle.spotify.discovery.service.ShuffleDiscoveryService;
 import org.example.deepshuffle.spotify.dto.Playlist;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
