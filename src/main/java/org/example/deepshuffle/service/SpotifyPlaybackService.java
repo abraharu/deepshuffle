@@ -1,9 +1,10 @@
 package org.example.deepshuffle.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.deepshuffle.spotify.auth.exception.SpotifyPlaybackException;
 import org.example.deepshuffle.spotify.playback.SpotifyDevice;
 import org.example.deepshuffle.spotify.playback.SpotifyDeviceService;
-import org.example.deepshuffle.spotify.auth.exception.SpotifyPlaybackException;
+import org.example.deepshuffle.spotify.playback.SpotifyPlaybackError;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -68,12 +69,8 @@ public class SpotifyPlaybackService {
     }
 
     private SpotifyPlaybackException playbackException(WebClientResponseException e) {
-        return switch (e.getStatusCode().value()) {
-            case 403 -> new SpotifyPlaybackException("Spotify Premium is required for remote playback", e);
-            case 404 -> new SpotifyPlaybackException(OPEN_SPOTIFY_MESSAGE, e);
-            case 429 -> new SpotifyPlaybackException("Spotify rate limit reached. Try again in a minute", e);
-            default -> new SpotifyPlaybackException("Spotify playback is unavailable right now", e);
-        };
+        SpotifyPlaybackError error = SpotifyPlaybackError.fromStatus(e.getStatusCode().value());
+        return new SpotifyPlaybackException(error.userMessage(), e);
     }
 
     private String normalizePlaylistUri(String playlistUri) {
