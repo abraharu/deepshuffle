@@ -21,6 +21,7 @@ import org.example.deepshuffle.spotify.taste.repository.UserTasteProfileReposito
 import org.example.deepshuffle.spotify.taste.repository.UserTasteTopArtistRepository;
 import org.example.deepshuffle.spotify.taste.repository.UserTasteTopTrackRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.time.Instant;
 import java.util.List;
@@ -54,9 +55,16 @@ public class UserTasteProfileService {
         profile.setLastSyncedAt(syncedAt);
         profileRepository.save(profile);
 
-        int topArtistCount = syncTopArtists(telegramUserId, accessToken, syncedAt);
-        int topTrackCount = syncTopTracks(telegramUserId, accessToken, syncedAt);
-        int likedTrackCount = syncLikedTracks(telegramUserId, accessToken, syncedAt);
+        int topArtistCount;
+        int topTrackCount;
+        int likedTrackCount;
+        try {
+            topArtistCount = syncTopArtists(telegramUserId, accessToken, syncedAt);
+            topTrackCount = syncTopTracks(telegramUserId, accessToken, syncedAt);
+            likedTrackCount = syncLikedTracks(telegramUserId, accessToken, syncedAt);
+        } catch (WebClientResponseException.Unauthorized | WebClientResponseException.Forbidden e) {
+            throw new SpotifyAuthorizationRequiredException("Spotify reconnect is required for taste fingerprint");
+        }
 
         return UserTasteSnapshot.builder()
                 .telegramUserId(telegramUserId)

@@ -35,9 +35,9 @@ public class TasteMessageFormatter {
 
     public String authRequired(String loginUrl) {
         return """
-                Connect Spotify first
+                Reconnect Spotify
 
-                Taste fingerprint needs access to your top music and liked tracks.
+                Taste fingerprint needs fresh access to your top music and liked tracks.
 
                 %s
                 """.formatted(loginUrl);
@@ -48,7 +48,7 @@ public class TasteMessageFormatter {
                 Taste sync failed
 
                 Status: Spotify taste data is unavailable right now
-                Next step: try again in a moment
+                Next step: try again in a moment or reconnect Spotify
                 """;
     }
 }

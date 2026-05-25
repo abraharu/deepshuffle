@@ -26,6 +26,11 @@ public class MainMenuKeyboardFactory {
                 .callbackData("sync_taste")
                 .build();
 
+        InlineKeyboardButton reconnectButton = InlineKeyboardButton.builder()
+                .text("Reconnect Spotify")
+                .callbackData("reconnect_spotify")
+                .build();
+
        InlineKeyboardRow row1 = new InlineKeyboardRow();
        row1.add(shuffleButon);
 
@@ -35,10 +40,14 @@ public class MainMenuKeyboardFactory {
         InlineKeyboardRow row3 = new InlineKeyboardRow();
         row3.add(tasteButton);
 
+        InlineKeyboardRow row4 = new InlineKeyboardRow();
+        row4.add(reconnectButton);
+
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(row1)
                 .keyboardRow(row2)
                 .keyboardRow(row3)
+                .keyboardRow(row4)
                 .build();
 
     }
