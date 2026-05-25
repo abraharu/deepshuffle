@@ -17,7 +17,7 @@ public class PlaybackMessageFormatter {
                 🎧 Playlist: %s
                 👤 Curator: %s
                 Status: contacting Spotify
-                """.formatted(playlist.name(), playlist.owner());
+                """.formatted(playlist.name(), playlist.ownerName());
     }
 
     public String success(SpotifyPlaybackResult result, Playlist playlist) {
@@ -32,7 +32,7 @@ public class PlaybackMessageFormatter {
                 %s
                 """.formatted(
                 playlist.name(),
-                playlist.owner(),
+                playlist.ownerName(),
                 deviceLabel(result.device()),
                 result.statusMessage(),
                 playlist.url()
@@ -60,7 +60,7 @@ public class PlaybackMessageFormatter {
                 Next step: %s
                 """.formatted(
                 playlist.name(),
-                playlist.owner(),
+                playlist.ownerName(),
                 error.userMessage(),
                 recoveryHint(error)
         );
@@ -74,7 +74,7 @@ public class PlaybackMessageFormatter {
                 👤 Curator: %s
                 Status: Spotify playback is unavailable right now
                 Next step: try again in a moment
-                """.formatted(playlist.name(), playlist.owner());
+                """.formatted(playlist.name(), playlist.ownerName());
     }
 
     private String deviceLabel(SpotifyDevice device) {

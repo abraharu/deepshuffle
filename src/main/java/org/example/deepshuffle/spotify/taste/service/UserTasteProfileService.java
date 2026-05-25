@@ -21,6 +21,7 @@ import org.example.deepshuffle.spotify.taste.repository.UserTasteProfileReposito
 import org.example.deepshuffle.spotify.taste.repository.UserTasteTopArtistRepository;
 import org.example.deepshuffle.spotify.taste.repository.UserTasteTopTrackRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.time.Instant;
@@ -60,6 +61,7 @@ public class UserTasteProfileService {
         return profileRepository.save(profile).getRandomnessLevel();
     }
 
+    @Transactional
     public UserTasteSnapshot syncTasteSnapshot(Long telegramUserId) {
         SpotifyUserToken token = tokenService.findByTelegramUserId(telegramUserId)
                 .orElseThrow(() -> new SpotifyAuthorizationRequiredException("Spotify account is not connected"));

@@ -43,7 +43,7 @@ public class ShuffleAgainCallbackHandler implements CallbackHandler{
         
         %s
         """
-        .formatted(playlist.name(), playlist.owner(), playlist.url());
+        .formatted(playlist.name(), playlist.ownerName(), playlist.url());
 
          InlineKeyboardButton openButton = InlineKeyboardButton.builder()
                  .text("OpenSpotify")

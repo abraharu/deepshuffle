@@ -2,6 +2,7 @@ package org.example.deepshuffle.service;
 
 import org.example.deepshuffle.config.TelegramBotProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.example.deepshuffle.spotify.dto.Playlist;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -10,6 +11,8 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.List;
 
 @Service
 @Slf4j

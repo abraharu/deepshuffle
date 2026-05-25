@@ -3,6 +3,7 @@ package org.example.deepshuffle.bot;
 import lombok.RequiredArgsConstructor;
 import org.example.deepshuffle.bot.callback.CallbackRouter;
 import org.example.deepshuffle.bot.command.CommandRouter;
+import org.example.deepshuffle.bot.message.PlaylistVibeMessageHandler;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -17,6 +18,8 @@ public class DeepshuffleBot implements LongPollingUpdateConsumer {
 
     private final CallbackRouter callbackRouter;
 
+    private final PlaylistVibeMessageHandler playlistVibeMessageHandler;
+
     @Override
     public void consume(List<Update> updates) {
         for (Update update : updates) {
@@ -24,6 +27,11 @@ public class DeepshuffleBot implements LongPollingUpdateConsumer {
             if(update.hasCallbackQuery()){
                 callbackRouter.route(update);
 
+                continue;
+            }
+
+            if (playlistVibeMessageHandler.supports(update)) {
+                playlistVibeMessageHandler.handle(update);
                 continue;
             }
 
