@@ -61,8 +61,8 @@ public class ShuffleAgainCallbackHandler implements CallbackHandler{
                  .build();
 
         InlineKeyboardButton backToMenu = InlineKeyboardButton.builder()
-                .text("Back to menu")
-                .callbackData("back_to_menu")
+                .text("⬅️ Back")
+                .callbackData("back:main")
                 .build();
 
          InlineKeyboardRow row1 = new InlineKeyboardRow();

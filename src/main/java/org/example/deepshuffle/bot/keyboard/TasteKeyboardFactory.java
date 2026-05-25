@@ -23,10 +23,14 @@ public class TasteKeyboardFactory {
                 .callbackData("sync_taste")
                 .build());
 
+        InlineKeyboardRow row4 = new InlineKeyboardRow();
+        row4.add(backButton("back:main"));
+
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(row1)
                 .keyboardRow(row2)
                 .keyboardRow(row3)
+                .keyboardRow(row4)
                 .build();
     }
 
@@ -47,25 +51,33 @@ public class TasteKeyboardFactory {
                 .callbackData("sync_taste")
                 .build());
 
+        InlineKeyboardRow row3 = new InlineKeyboardRow();
+        row3.add(backButton("back:taste_settings"));
+
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(row1)
                 .keyboardRow(row2)
+                .keyboardRow(row3)
                 .build();
     }
 
     public InlineKeyboardMarkup syncResult() {
-        InlineKeyboardRow row = new InlineKeyboardRow();
-        row.add(InlineKeyboardButton.builder()
+        InlineKeyboardRow row1 = new InlineKeyboardRow();
+        row1.add(InlineKeyboardButton.builder()
                 .text("🎚 Set Randomness")
                 .callbackData("taste_settings")
                 .build());
-        row.add(InlineKeyboardButton.builder()
+        row1.add(InlineKeyboardButton.builder()
                 .text("🎲 Shuffle")
                 .callbackData("shuffle")
                 .build());
 
+        InlineKeyboardRow row2 = new InlineKeyboardRow();
+        row2.add(backButton("back:main"));
+
         return InlineKeyboardMarkup.builder()
-                .keyboardRow(row)
+                .keyboardRow(row1)
+                .keyboardRow(row2)
                 .build();
     }
 
@@ -73,6 +85,13 @@ public class TasteKeyboardFactory {
         return InlineKeyboardButton.builder()
                 .text("%s %d%%".formatted(label, level))
                 .callbackData("set_randomness:" + level)
+                .build();
+    }
+
+    private InlineKeyboardButton backButton(String callback) {
+        return InlineKeyboardButton.builder()
+                .text("⬅️ Back")
+                .callbackData(callback)
                 .build();
     }
 }

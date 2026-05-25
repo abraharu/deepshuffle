@@ -11,11 +11,15 @@ public class PlaybackKeyboardFactory {
     private static final String PLAYLIST_URL_PREFIX = "https://open.spotify.com/playlist/";
 
     public InlineKeyboardMarkup loading(String playlistId) {
-        InlineKeyboardRow row = new InlineKeyboardRow();
-        row.add(playButton("▶️ Starting...", playlistId));
+        InlineKeyboardRow row1 = new InlineKeyboardRow();
+        row1.add(playButton("▶️ Starting...", playlistId));
+
+        InlineKeyboardRow row2 = new InlineKeyboardRow();
+        row2.add(backButton());
 
         return InlineKeyboardMarkup.builder()
-                .keyboardRow(row)
+                .keyboardRow(row1)
+                .keyboardRow(row2)
                 .build();
     }
 
@@ -27,9 +31,13 @@ public class PlaybackKeyboardFactory {
         row2.add(playButton("▶️ Play Again", playlistId));
         row2.add(shuffleButton());
 
+        InlineKeyboardRow row3 = new InlineKeyboardRow();
+        row3.add(backButton());
+
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(row1)
                 .keyboardRow(row2)
+                .keyboardRow(row3)
                 .build();
     }
 
@@ -41,9 +49,13 @@ public class PlaybackKeyboardFactory {
         row2.add(openButton(playlistId));
         row2.add(shuffleButton());
 
+        InlineKeyboardRow row3 = new InlineKeyboardRow();
+        row3.add(backButton());
+
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(row1)
                 .keyboardRow(row2)
+                .keyboardRow(row3)
                 .build();
     }
 
@@ -57,9 +69,13 @@ public class PlaybackKeyboardFactory {
         InlineKeyboardRow row2 = new InlineKeyboardRow();
         row2.add(openButton(playlistId));
 
+        InlineKeyboardRow row3 = new InlineKeyboardRow();
+        row3.add(backButton());
+
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(row1)
                 .keyboardRow(row2)
+                .keyboardRow(row3)
                 .build();
     }
 
@@ -81,6 +97,13 @@ public class PlaybackKeyboardFactory {
         return InlineKeyboardButton.builder()
                 .text("🎲 Shuffle Again")
                 .callbackData("shuffle")
+                .build();
+    }
+
+    private InlineKeyboardButton backButton() {
+        return InlineKeyboardButton.builder()
+                .text("⬅️ Back")
+                .callbackData("back:main")
                 .build();
     }
 }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.deepshuffle.service.SpotifyAuthService;
 import org.springframework.stereotype.Component;
 import se.michaelthelin.spotify.SpotifyApi;
+import se.michaelthelin.spotify.exceptions.detailed.TooManyRequestsException;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack;
@@ -58,8 +59,11 @@ public class SpotifyClient {
             log.info("Playlists found: {}", playlists.getItems().length);
             return Arrays.asList(playlists.getItems());
 
+        } catch (TooManyRequestsException e) {
+            log.warn("Spotify playlist search rate-limited. Retry after {} seconds", e.getRetryAfter());
+            throw new SpotifyRateLimitException("Spotify playlist search rate-limited", e.getRetryAfter(), e);
         } catch (Exception e) {
-            log.error("Error searching playlists: {}", e.getMessage());
+            log.warn("Error searching playlists: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }

@@ -21,21 +21,36 @@ public class SpotifyAuthKeyboardFactory {
                 .callbackData("sync_taste")
                 .build());
 
+        InlineKeyboardRow row3 = new InlineKeyboardRow();
+        row3.add(backButton());
+
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(row1)
+                .keyboardRow(row2)
+                .keyboardRow(row3)
+                .build();
+    }
+
+    public InlineKeyboardMarkup reconnectAction() {
+        InlineKeyboardRow row1 = new InlineKeyboardRow();
+        row1.add(InlineKeyboardButton.builder()
+                .text("🔐 Reconnect Spotify")
+                .callbackData("reconnect_spotify")
+                .build());
+
+        InlineKeyboardRow row2 = new InlineKeyboardRow();
+        row2.add(backButton());
+
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(row1)
                 .keyboardRow(row2)
                 .build();
     }
 
-    public InlineKeyboardMarkup reconnectAction() {
-        InlineKeyboardRow row = new InlineKeyboardRow();
-        row.add(InlineKeyboardButton.builder()
-                .text("🔐 Reconnect Spotify")
-                .callbackData("reconnect_spotify")
-                .build());
-
-        return InlineKeyboardMarkup.builder()
-                .keyboardRow(row)
+    private InlineKeyboardButton backButton() {
+        return InlineKeyboardButton.builder()
+                .text("⬅️ Back")
+                .callbackData("back:main")
                 .build();
     }
 }

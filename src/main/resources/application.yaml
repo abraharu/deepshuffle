@@ -14,3 +14,10 @@ spotify:
     id: ${SPOTIFY_CLIENT_ID:}
     secret: ${SPOTIFY_CLIENT_SECRET:}
   redirect-uri: ${SPOTIFY_CLIENT_URI:}
+
+deepshuffle:
+  discovery:
+    crawler:
+      enabled: ${DEEPSHUFFLE_DISCOVERY_CRAWLER_ENABLED:true}
+      fixed-delay-ms: ${DEEPSHUFFLE_DISCOVERY_CRAWLER_FIXED_DELAY_MS:30000}
+      initial-delay-ms: ${DEEPSHUFFLE_DISCOVERY_CRAWLER_INITIAL_DELAY_MS:10000}

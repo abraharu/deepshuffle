@@ -8,8 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 @Component
 public class GenreKeyboardFactory {
 
-    public InlineKeyboardMarkup create(){
-
+    public InlineKeyboardMarkup create() {
         InlineKeyboardButton phonk = InlineKeyboardButton.builder()
                 .text("Phonk")
                 .callbackData("genre_phonk")
@@ -21,19 +20,17 @@ public class GenreKeyboardFactory {
                 .build();
 
         InlineKeyboardButton back = InlineKeyboardButton.builder()
-                .text("⬅ Back")
-                .callbackData("back_to_menu")
+                .text("⬅️ Back")
+                .callbackData("back:main")
                 .build();
 
         InlineKeyboardRow row1 = new InlineKeyboardRow();
         row1.add(phonk);
 
         InlineKeyboardRow row2 = new InlineKeyboardRow();
-
         row2.add(rock);
 
         InlineKeyboardRow row3 = new InlineKeyboardRow();
-
         row3.add(back);
 
         return InlineKeyboardMarkup.builder()
@@ -41,6 +38,5 @@ public class GenreKeyboardFactory {
                 .keyboardRow(row2)
                 .keyboardRow(row3)
                 .build();
-
     }
 }
