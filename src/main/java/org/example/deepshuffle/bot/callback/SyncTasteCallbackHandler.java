@@ -3,6 +3,7 @@ package org.example.deepshuffle.bot.callback;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.deepshuffle.bot.keyboard.SpotifyAuthKeyboardFactory;
+import org.example.deepshuffle.bot.keyboard.TasteKeyboardFactory;
 import org.example.deepshuffle.bot.taste.TasteMessageFormatter;
 import org.example.deepshuffle.service.SpotifyOAuthService;
 import org.example.deepshuffle.service.TelegramMessageService;
@@ -24,6 +25,7 @@ public class SyncTasteCallbackHandler implements CallbackHandler {
     private final TelegramMessageService messageService;
     private final TasteMessageFormatter messageFormatter;
     private final SpotifyAuthKeyboardFactory authKeyboardFactory;
+    private final TasteKeyboardFactory tasteKeyboardFactory;
 
     @Override
     public boolean supports(String callback) {
@@ -40,7 +42,11 @@ public class SyncTasteCallbackHandler implements CallbackHandler {
             messageService.sendMessage(chatId, messageFormatter.loading());
 
             UserTasteSnapshot snapshot = tasteProfileService.syncTasteSnapshot(telegramUserId);
-            messageService.sendMessage(chatId, messageFormatter.success(snapshot));
+            messageService.sendMessage(
+                    chatId,
+                    messageFormatter.success(snapshot),
+                    tasteKeyboardFactory.syncResult()
+            );
         } catch (SpotifyAuthorizationRequiredException e) {
             String loginUrl = oauthService.generateLoginUrl(telegramUserId);
             messageService.sendMessage(

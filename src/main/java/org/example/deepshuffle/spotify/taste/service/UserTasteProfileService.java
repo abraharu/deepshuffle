@@ -42,6 +42,24 @@ public class UserTasteProfileService {
     private final UserTasteTopTrackRepository topTrackRepository;
     private final UserLikedTrackRepository likedTrackRepository;
 
+    public int getRandomnessLevel(Long telegramUserId) {
+        return profileRepository.findByTelegramUserId(telegramUserId)
+                .map(UserTasteProfileEntity::getRandomnessLevel)
+                .orElse(DEFAULT_RANDOMNESS_LEVEL);
+    }
+
+    public int updateRandomnessLevel(Long telegramUserId, int randomnessLevel) {
+        int normalizedLevel = Math.max(0, Math.min(100, randomnessLevel));
+        Instant now = Instant.now();
+
+        UserTasteProfileEntity profile = profileRepository.findByTelegramUserId(telegramUserId)
+                .orElseGet(() -> newProfile(telegramUserId));
+        profile.setRandomnessLevel(normalizedLevel);
+        profile.setUpdatedAt(now);
+
+        return profileRepository.save(profile).getRandomnessLevel();
+    }
+
     public UserTasteSnapshot syncTasteSnapshot(Long telegramUserId) {
         SpotifyUserToken token = tokenService.findByTelegramUserId(telegramUserId)
                 .orElseThrow(() -> new SpotifyAuthorizationRequiredException("Spotify account is not connected"));

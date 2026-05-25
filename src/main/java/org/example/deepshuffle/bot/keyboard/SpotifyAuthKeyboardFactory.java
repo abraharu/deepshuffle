@@ -11,13 +11,13 @@ public class SpotifyAuthKeyboardFactory {
     public InlineKeyboardMarkup reconnect(String loginUrl) {
         InlineKeyboardRow row1 = new InlineKeyboardRow();
         row1.add(InlineKeyboardButton.builder()
-                .text("Open Spotify Login")
+                .text("🔐 Open Spotify Login")
                 .url(loginUrl)
                 .build());
 
         InlineKeyboardRow row2 = new InlineKeyboardRow();
         row2.add(InlineKeyboardButton.builder()
-                .text("Sync Taste")
+                .text("🧬 Sync Taste")
                 .callbackData("sync_taste")
                 .build());
 
@@ -30,7 +30,7 @@ public class SpotifyAuthKeyboardFactory {
     public InlineKeyboardMarkup reconnectAction() {
         InlineKeyboardRow row = new InlineKeyboardRow();
         row.add(InlineKeyboardButton.builder()
-                .text("Reconnect Spotify")
+                .text("🔐 Reconnect Spotify")
                 .callbackData("reconnect_spotify")
                 .build());
 

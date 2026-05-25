@@ -12,7 +12,7 @@ public class PlaybackKeyboardFactory {
 
     public InlineKeyboardMarkup loading(String playlistId) {
         InlineKeyboardRow row = new InlineKeyboardRow();
-        row.add(playButton("Starting...", playlistId));
+        row.add(playButton("▶️ Starting...", playlistId));
 
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(row)
@@ -24,7 +24,7 @@ public class PlaybackKeyboardFactory {
         row1.add(openButton(playlistId));
 
         InlineKeyboardRow row2 = new InlineKeyboardRow();
-        row2.add(playButton("Play Again", playlistId));
+        row2.add(playButton("▶️ Play Again", playlistId));
         row2.add(shuffleButton());
 
         return InlineKeyboardMarkup.builder()
@@ -35,7 +35,7 @@ public class PlaybackKeyboardFactory {
 
     public InlineKeyboardMarkup failure(String playlistId) {
         InlineKeyboardRow row1 = new InlineKeyboardRow();
-        row1.add(playButton("Try Again", playlistId));
+        row1.add(playButton("🔁 Try Again", playlistId));
 
         InlineKeyboardRow row2 = new InlineKeyboardRow();
         row2.add(openButton(playlistId));
@@ -50,7 +50,7 @@ public class PlaybackKeyboardFactory {
     public InlineKeyboardMarkup authRequired(String loginUrl, String playlistId) {
         InlineKeyboardRow row1 = new InlineKeyboardRow();
         row1.add(InlineKeyboardButton.builder()
-                .text("Connect Spotify")
+                .text("🔐 Connect Spotify")
                 .url(loginUrl)
                 .build());
 
@@ -65,7 +65,7 @@ public class PlaybackKeyboardFactory {
 
     private InlineKeyboardButton openButton(String playlistId) {
         return InlineKeyboardButton.builder()
-                .text("Open in Spotify")
+                .text("🎧 Open in Spotify")
                 .url(PLAYLIST_URL_PREFIX + playlistId)
                 .build();
     }
@@ -79,7 +79,7 @@ public class PlaybackKeyboardFactory {
 
     private InlineKeyboardButton shuffleButton() {
         return InlineKeyboardButton.builder()
-                .text("Shuffle Again")
+                .text("🎲 Shuffle Again")
                 .callbackData("shuffle")
                 .build();
     }

@@ -7,7 +7,7 @@ public class SpotifyAuthMessageFormatter {
 
     public String reconnectRequired() {
         return """
-                Reconnect Spotify
+                🔐 Reconnect Spotify
 
                 DeepShuffle needs fresh Spotify permissions to use taste fingerprint features:
                 top artists, top tracks, and liked tracks.
@@ -18,7 +18,7 @@ public class SpotifyAuthMessageFormatter {
 
     public String connectRequired() {
         return """
-                Connect Spotify
+                🔐 Connect Spotify
 
                 DeepShuffle needs Spotify access before it can start playback or build your taste fingerprint.
                 """;

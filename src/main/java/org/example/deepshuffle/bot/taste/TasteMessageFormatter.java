@@ -8,34 +8,37 @@ public class TasteMessageFormatter {
 
     public String loading() {
         return """
-                Building taste fingerprint
+                🧬 Building your taste fingerprint
 
-                Status: reading your Spotify taste signals
+                Status: reading Spotify taste signals
                 Sources: top artists, top tracks, liked tracks
+
+                This may take a few seconds if Spotify asks us to slow down.
                 """;
     }
 
     public String success(UserTasteSnapshot snapshot) {
         return """
-                Taste fingerprint updated
+                ✅ Taste fingerprint updated
 
-                Top artists saved: %d
-                Top tracks saved: %d
-                Liked tracks saved: %d
-                Randomness level: %d/100
+                🎤 Top artists: %d
+                🎵 Top tracks: %d
+                💚 Liked tracks: %d
+                🎚 Randomness: %d/100 — %s
 
-                Next: shuffle can use this profile for controlled randomness.
+                Next: choose how adventurous DeepShuffle should be.
                 """.formatted(
                 snapshot.topArtistsCount(),
                 snapshot.topTracksCount(),
                 snapshot.likedTracksCount(),
-                snapshot.randomnessLevel()
+                snapshot.randomnessLevel(),
+                randomnessLabel(snapshot.randomnessLevel())
         );
     }
 
     public String authRequired(String loginUrl) {
         return """
-                Reconnect Spotify
+                🔐 Reconnect Spotify
 
                 Taste fingerprint needs fresh access to your top music and liked tracks.
 
@@ -45,10 +48,46 @@ public class TasteMessageFormatter {
 
     public String failure() {
         return """
-                Taste sync failed
+                ⚠️ Taste sync failed
 
                 Status: Spotify taste data is unavailable right now
                 Next step: try again in a moment or reconnect Spotify
                 """;
+    }
+
+    public String randomnessSettings(int currentLevel) {
+        return """
+                🎚 Discovery randomness
+
+                Current level: %d/100 — %s
+
+                Safe keeps close to your taste.
+                Balanced explores nearby scenes.
+                Deep goes underground.
+                Chaos is pure DeepShuffle energy.
+                """.formatted(currentLevel, randomnessLabel(currentLevel));
+    }
+
+    public String randomnessUpdated(int level) {
+        return """
+                ✅ Randomness updated
+
+                New level: %d/100 — %s
+
+                Future personalized shuffle can use this as the chaos dial.
+                """.formatted(level, randomnessLabel(level));
+    }
+
+    private String randomnessLabel(int level) {
+        if (level < 30) {
+            return "Safe";
+        }
+        if (level < 65) {
+            return "Balanced";
+        }
+        if (level < 90) {
+            return "Deep";
+        }
+        return "Chaos";
     }
 }

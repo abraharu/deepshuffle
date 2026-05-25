@@ -12,21 +12,21 @@ public class PlaybackMessageFormatter {
 
     public String loading(Playlist playlist) {
         return """
-                Starting playback
+                ▶️ Starting playback
 
-                Playlist: %s
-                Curator: %s
+                🎧 Playlist: %s
+                👤 Curator: %s
                 Status: contacting Spotify
                 """.formatted(playlist.name(), playlist.owner());
     }
 
     public String success(SpotifyPlaybackResult result, Playlist playlist) {
         return """
-                Playback started
+                ✅ Playback started
 
-                Playlist: %s
-                Curator: %s
-                Device: %s
+                🎧 Playlist: %s
+                👤 Curator: %s
+                🔊 Device: %s
                 Status: %s
 
                 %s
@@ -41,7 +41,7 @@ public class PlaybackMessageFormatter {
 
     public String authRequired(String loginUrl) {
         return """
-                Connect Spotify first
+                🔐 Connect Spotify first
 
                 To start playback from Telegram, link your Spotify account.
 
@@ -52,10 +52,10 @@ public class PlaybackMessageFormatter {
     public String failure(Playlist playlist, SpotifyPlaybackException exception) {
         SpotifyPlaybackError error = exception.getError();
         return """
-                Playback needs attention
+                ⚠️ Playback needs attention
 
-                Playlist: %s
-                Curator: %s
+                🎧 Playlist: %s
+                👤 Curator: %s
                 Status: %s
                 Next step: %s
                 """.formatted(
@@ -68,10 +68,10 @@ public class PlaybackMessageFormatter {
 
     public String unexpectedFailure(Playlist playlist) {
         return """
-                Playback failed
+                ⚠️ Playback failed
 
-                Playlist: %s
-                Curator: %s
+                🎧 Playlist: %s
+                👤 Curator: %s
                 Status: Spotify playback is unavailable right now
                 Next step: try again in a moment
                 """.formatted(playlist.name(), playlist.owner());

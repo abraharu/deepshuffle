@@ -11,23 +11,28 @@ public class MainMenuKeyboardFactory {
     public InlineKeyboardMarkup create(){
 
         InlineKeyboardButton shuffleButon = InlineKeyboardButton.builder()
-                .text("Shuffle")
+                .text("🎲 Shuffle")
                 .callbackData("shuffle")
                 .build();
 
 
         InlineKeyboardButton genreButton = InlineKeyboardButton.builder()
-                .text("Random Genre")
+                .text("🎧 Random Genre")
                 .callbackData("random_genre")
                 .build();
 
         InlineKeyboardButton tasteButton = InlineKeyboardButton.builder()
-                .text("Sync Taste")
+                .text("🧬 Sync Taste")
                 .callbackData("sync_taste")
                 .build();
 
+        InlineKeyboardButton randomnessButton = InlineKeyboardButton.builder()
+                .text("🎚 Randomness")
+                .callbackData("taste_settings")
+                .build();
+
         InlineKeyboardButton reconnectButton = InlineKeyboardButton.builder()
-                .text("Reconnect Spotify")
+                .text("🔐 Reconnect Spotify")
                 .callbackData("reconnect_spotify")
                 .build();
 
@@ -39,6 +44,7 @@ public class MainMenuKeyboardFactory {
 
         InlineKeyboardRow row3 = new InlineKeyboardRow();
         row3.add(tasteButton);
+        row3.add(randomnessButton);
 
         InlineKeyboardRow row4 = new InlineKeyboardRow();
         row4.add(reconnectButton);
