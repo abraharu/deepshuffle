@@ -1,5 +1,6 @@
 package org.example.deepshuffle.service;
 
+import org.example.deepshuffle.config.SpotifyProperties;
 import org.example.deepshuffle.persistence.entity.SpotifyUserTokenEntity;
 import org.example.deepshuffle.persistence.repository.SpotifyUserTokenRepository;
 import org.example.deepshuffle.spotify.auth.dto.SpotifyTokenPayload;
@@ -7,7 +8,6 @@ import org.example.deepshuffle.spotify.auth.exception.SpotifyAuthorizationRequir
 import org.example.deepshuffle.spotify.auth.exception.SpotifyTokenRefreshException;
 import org.example.deepshuffle.spotify.auth.model.SpotifyUserToken;
 import org.example.deepshuffle.spotify.mapper.SpotifyTokenMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -26,17 +26,14 @@ public class SpotifyTokenService {
     private final SpotifyUserTokenRepository tokenRepository;
     private final SpotifyTokenMapper tokenMapper;
     private final WebClient webClient = WebClient.builder().build();
-    private final String clientId;
-    private final String clientSecret;
+    private final SpotifyProperties spotifyProperties;
 
     public SpotifyTokenService(SpotifyUserTokenRepository tokenRepository,
                                SpotifyTokenMapper tokenMapper,
-                               @Value("${spotify.client.id}") String clientId,
-                               @Value("${spotify.client.secret}") String clientSecret) {
+                               SpotifyProperties spotifyProperties) {
         this.tokenRepository = tokenRepository;
         this.tokenMapper = tokenMapper;
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
+        this.spotifyProperties = spotifyProperties;
     }
 
     public Optional<SpotifyUserToken> findByTelegramUserId(Long telegramUserId) {
@@ -75,7 +72,10 @@ public class SpotifyTokenService {
 
         SpotifyTokenPayload payload = webClient.post()
                 .uri(TOKEN_URL)
-                .headers(headers -> headers.setBasicAuth(clientId, clientSecret))
+                .headers(headers -> headers.setBasicAuth(
+                        spotifyProperties.client().id(),
+                        spotifyProperties.client().secret()
+                ))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(BodyInserters.fromFormData(form))
                 .retrieve()

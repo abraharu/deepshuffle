@@ -1,10 +1,11 @@
 package org.example.deepshuffle.service;
 
+import org.example.deepshuffle.config.SpotifyProperties;
 import org.example.deepshuffle.spotify.auth.dto.SpotifyMeResponse;
 import org.example.deepshuffle.spotify.auth.dto.SpotifyTokenPayload;
 import org.example.deepshuffle.spotify.auth.exception.SpotifyAuthorizationRequiredException;
 import org.example.deepshuffle.spotify.auth.model.SpotifyUserToken;
-import org.springframework.beans.factory.annotation.Value;
+import org.example.deepshuffle.spotify.auth.service.SpotifyOAuthStateService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -21,38 +22,28 @@ public class SpotifyOAuthService {
     private static final String AUTHORIZE_URL = "https://accounts.spotify.com/authorize";
     private static final String TOKEN_URL = "https://accounts.spotify.com/api/token";
     private static final String ME_URL = "https://api.spotify.com/v1/me";
-    private static final String SCOPES = String.join(" ",
-            "user-modify-playback-state",
-            "user-read-playback-state",
-            "user-read-currently-playing",
-            "user-top-read",
-            "user-library-read"
-    );
 
     private final WebClient webClient;
     private final SpotifyTokenService tokenService;
-    private final String clientId;
-    private final String clientSecret;
-    private final String redirectUri;
+    private final SpotifyProperties spotifyProperties;
+    private final SpotifyOAuthStateService stateService;
 
     public SpotifyOAuthService(SpotifyTokenService tokenService,
-                               @Value("${spotify.client.id}") String clientId,
-                               @Value("${spotify.client.secret}") String clientSecret,
-                               @Value("${spotify.redirect-uri:http://127.0.0.1:8080/spotify/callback}") String redirectUri) {
+                               SpotifyProperties spotifyProperties,
+                               SpotifyOAuthStateService stateService) {
         this.webClient = WebClient.builder().build();
         this.tokenService = tokenService;
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.redirectUri = redirectUri;
+        this.spotifyProperties = spotifyProperties;
+        this.stateService = stateService;
     }
 
     public String generateLoginUrl(Long telegramUserId) {
         return UriComponentsBuilder.fromUriString(AUTHORIZE_URL)
-                .queryParam("client_id", clientId)
+                .queryParam("client_id", spotifyProperties.client().id())
                 .queryParam("response_type", "code")
-                .queryParam("redirect_uri", redirectUri)
-                .queryParam("scope", SCOPES)
-                .queryParam("state", telegramUserId)
+                .queryParam("redirect_uri", spotifyProperties.redirectUri())
+                .queryParam("scope", scopes())
+                .queryParam("state", stateService.generateState(telegramUserId))
                 .build()
                 .encode()
                 .toUriString();
@@ -62,11 +53,13 @@ public class SpotifyOAuthService {
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.add("grant_type", "authorization_code");
         form.add("code", code);
-        form.add("redirect_uri", redirectUri);
-        System.out.println("REDIRECT URI = " + redirectUri);
+        form.add("redirect_uri", spotifyProperties.redirectUri());
         SpotifyTokenPayload payload = webClient.post()
                 .uri(TOKEN_URL)
-                .headers(headers -> headers.setBasicAuth(clientId, clientSecret))
+                .headers(headers -> headers.setBasicAuth(
+                        spotifyProperties.client().id(),
+                        spotifyProperties.client().secret()
+                ))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(BodyInserters.fromFormData(form))
                 .retrieve()
@@ -94,5 +87,19 @@ public class SpotifyOAuthService {
                 .build();
 
         return tokenService.save(token);
+    }
+
+    public Long validateState(String state) {
+        return stateService.validateAndExtractTelegramUserId(state);
+    }
+
+    private String scopes() {
+        return String.join(" ",
+                "user-modify-playback-state",
+                "user-read-playback-state",
+                "user-read-currently-playing",
+                "user-top-read",
+                "user-library-read"
+        );
     }
 }

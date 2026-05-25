@@ -1,7 +1,7 @@
 package org.example.deepshuffle.service;
 
+import org.example.deepshuffle.config.TelegramBotProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -16,8 +16,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class TelegramMessageService {
     private final OkHttpTelegramClient client;
 
-    public TelegramMessageService(@Value("${telegram.bot.token}") String token) {
-        this.client = new OkHttpTelegramClient(token);
+    public TelegramMessageService(TelegramBotProperties telegramBotProperties) {
+        this.client = new OkHttpTelegramClient(telegramBotProperties.token());
     }
 
     public void sendMessage(Long chatId, String text){
