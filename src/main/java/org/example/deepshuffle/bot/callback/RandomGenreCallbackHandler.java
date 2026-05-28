@@ -11,12 +11,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor
 public class RandomGenreCallbackHandler implements CallbackHandler {
 
+    private static final String LEGACY_CALLBACK = "random_genre";
+    private static final String PLAYLIST_VIBE_CALLBACK = "playlist_vibe";
+
     private final TelegramMessageService messageService;
     private final UserStateService userStateService;
 
     @Override
     public boolean supports(String callback) {
-        return callback.startsWith("random_genre");
+        return callback.startsWith(LEGACY_CALLBACK) || callback.startsWith(PLAYLIST_VIBE_CALLBACK);
     }
 
     @Override
@@ -28,14 +31,14 @@ public class RandomGenreCallbackHandler implements CallbackHandler {
         messageService.sendMessage(
                 chatId,
                 """
-                Describe what you want to listen to 🎧
+                Describe the playlist mood you want to hear.
 
                 For example:
-                • dark techno for night coding
-                • chill indie for walking
-                • sad acoustic songs
-                • energetic gym rap
-                • dreamy summer house
+                - dark techno for night coding
+                - chill indie for walking
+                - sad acoustic songs
+                - energetic gym rap
+                - dreamy summer house
                 """
         );
     }

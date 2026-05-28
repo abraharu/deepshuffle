@@ -8,39 +8,37 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 @Component
 public class MainMenuKeyboardFactory {
 
-    public InlineKeyboardMarkup create(){
-
-        InlineKeyboardButton shuffleButon = InlineKeyboardButton.builder()
-                .text("🎲 Shuffle")
+    public InlineKeyboardMarkup create() {
+        InlineKeyboardButton shuffleButton = InlineKeyboardButton.builder()
+                .text("Shuffle")
                 .callbackData("shuffle")
                 .build();
 
-
-        InlineKeyboardButton genreButton = InlineKeyboardButton.builder()
-                .text("🎧 Random Genre")
-                .callbackData("random_genre")
+        InlineKeyboardButton vibeButton = InlineKeyboardButton.builder()
+                .text("Set Playlist Mood")
+                .callbackData("playlist_vibe")
                 .build();
 
         InlineKeyboardButton tasteButton = InlineKeyboardButton.builder()
-                .text("🧬 Sync Taste")
+                .text("Sync Taste")
                 .callbackData("sync_taste")
                 .build();
 
         InlineKeyboardButton randomnessButton = InlineKeyboardButton.builder()
-                .text("🎚 Randomness")
+                .text("Randomness")
                 .callbackData("taste_settings")
                 .build();
 
         InlineKeyboardButton reconnectButton = InlineKeyboardButton.builder()
-                .text("🔐 Reconnect Spotify")
+                .text("Reconnect Spotify")
                 .callbackData("reconnect_spotify")
                 .build();
 
-       InlineKeyboardRow row1 = new InlineKeyboardRow();
-       row1.add(shuffleButon);
+        InlineKeyboardRow row1 = new InlineKeyboardRow();
+        row1.add(shuffleButton);
 
         InlineKeyboardRow row2 = new InlineKeyboardRow();
-        row2.add(genreButton);
+        row2.add(vibeButton);
 
         InlineKeyboardRow row3 = new InlineKeyboardRow();
         row3.add(tasteButton);
@@ -55,7 +53,5 @@ public class MainMenuKeyboardFactory {
                 .keyboardRow(row3)
                 .keyboardRow(row4)
                 .build();
-
     }
-
 }

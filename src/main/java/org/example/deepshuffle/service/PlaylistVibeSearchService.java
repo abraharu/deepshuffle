@@ -1,6 +1,7 @@
 package org.example.deepshuffle.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.deepshuffle.spotify.client.SpotifyClient;
 import org.example.deepshuffle.spotify.discovery.mapper.DiscoveredPlaylistMapper;
 import org.example.deepshuffle.spotify.discovery.model.DiscoveredPlaylist;
@@ -12,6 +13,7 @@ import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PlaylistVibeSearchService {
@@ -26,18 +28,25 @@ public class PlaylistVibeSearchService {
     public List<Playlist> searchPlaylistsByVibe(String vibeText) {
         String query = normalizeQuery(vibeText);
 
-        List<DiscoveredPlaylist> discoveredPlaylists = spotifyClient.searchPlaylists(query, SEARCH_LIMIT).stream()
-                .filter(this::isValidPlaylist)
-                .map(playlist -> playlistMapper.fromSpotify(playlist, query))
-                .limit(RESULT_LIMIT)
-                .toList();
-        if (discoveredPlaylists.isEmpty()) {
-            playlistPersistenceService.saveAll(discoveredPlaylists);
-        }
+        try {
+            List<DiscoveredPlaylist> discoveredPlaylists = spotifyClient.searchPlaylists(query, 0, SEARCH_LIMIT).stream()
+                    .filter(this::isValidPlaylist)
+                    .map(playlist -> playlistMapper.fromSpotify(playlist, query))
+                    .limit(RESULT_LIMIT)
+                    .toList();
 
-        return discoveredPlaylists.stream()
-                .map(this::toPlaylist)
-                .toList();
+            if (discoveredPlaylists.isEmpty()) {
+                return cachedResults(query);
+            }
+
+            List<DiscoveredPlaylist> persistedPlaylists = playlistPersistenceService.saveAll(discoveredPlaylists);
+            return persistedPlaylists.stream()
+                    .map(this::toPlaylist)
+                    .toList();
+        } catch (Exception e) {
+            log.warn("Spotify vibe search failed for query '{}': {}", query, e.getMessage());
+            return cachedResults(query);
+        }
     }
 
     private Playlist toPlaylist(DiscoveredPlaylist discoveredPlaylist) {
@@ -53,9 +62,6 @@ public class PlaylistVibeSearchService {
         return playlistSimplified != null
                 && playlistSimplified.getId() != null
                 && playlistSimplified.getName() != null
-                && playlistSimplified.getOwner() != null
-                && playlistSimplified.getOwner().getId() != null
-                && playlistSimplified.getOwner().getId().equalsIgnoreCase("spotify")
                 && playlistSimplified.getExternalUrls() != null
                 && playlistSimplified.getExternalUrls().getExternalUrls() != null
                 && Objects.nonNull(playlistSimplified.getExternalUrls().getExternalUrls().get("spotify"));
@@ -66,5 +72,11 @@ public class PlaylistVibeSearchService {
             return "chill music";
         }
         return vibeText.trim();
+    }
+
+    private List<Playlist> cachedResults(String query) {
+        return playlistPersistenceService.findCachedByQuery(query, RESULT_LIMIT).stream()
+                .map(this::toPlaylist)
+                .toList();
     }
 }

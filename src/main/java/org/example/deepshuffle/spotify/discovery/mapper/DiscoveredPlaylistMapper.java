@@ -16,7 +16,7 @@ public class DiscoveredPlaylistMapper {
         return DiscoveredPlaylist.builder()
                 .spotifyPlaylistId(playlist.getId())
                 .name(playlist.getName())
-                .ownerName(playlist.getOwner() == null ? null : playlist.getOwner().getDisplayName())
+                .ownerName(resolveOwnerName(playlist))
                 .spotifyUrl(extractSpotifyUrl(playlist))
                 .querySeed(querySeed)
                 .usageCount(0)
@@ -81,6 +81,22 @@ public class DiscoveredPlaylistMapper {
 
         Map<String, String> urls = playlist.getExternalUrls().getExternalUrls();
         return urls.get("spotify");
+    }
+
+    private String resolveOwnerName(PlaylistSimplified playlist) {
+        if (playlist.getOwner() == null) {
+            return "Unknown curator";
+        }
+
+        if (playlist.getOwner().getDisplayName() != null && !playlist.getOwner().getDisplayName().isBlank()) {
+            return playlist.getOwner().getDisplayName();
+        }
+
+        if (playlist.getOwner().getId() != null && !playlist.getOwner().getId().isBlank()) {
+            return playlist.getOwner().getId();
+        }
+
+        return "Unknown curator";
     }
 
     private String detectLanguage(String value) {

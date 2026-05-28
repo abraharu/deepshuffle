@@ -50,6 +50,16 @@ public class PlaylistPersistenceService {
         return playlistMapper.toModel(playlistRepository.save(entity));
     }
 
+    @Transactional(readOnly = true)
+    public List<DiscoveredPlaylist> findCachedByQuery(String query, int limit) {
+        return playlistRepository.findCachedByQuery(
+                        query,
+                        org.springframework.data.domain.PageRequest.of(0, limit)
+                ).stream()
+                .map(playlistMapper::toModel)
+                .toList();
+    }
+
     public boolean hasEnoughPlaylists(int minimumSize) {
         return playlistRepository.countByActiveTrue() >= minimumSize;
     }
