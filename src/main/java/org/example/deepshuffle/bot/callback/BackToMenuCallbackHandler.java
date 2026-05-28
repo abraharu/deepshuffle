@@ -23,7 +23,9 @@ public class BackToMenuCallbackHandler implements CallbackHandler{
 
     @Override
     public boolean supports(String callback) {
-        return callback.equals("back_to_menu") || callback.startsWith("back:");
+        return callback.equals("back_to_menu")
+                || callback.equals("back:main")
+                || callback.equals("back:taste_settings");
     }
 
     @Override

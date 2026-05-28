@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.deepshuffle.bot.keyboard.PlaybackKeyboardFactory;
 import org.example.deepshuffle.bot.playback.PlaybackMessageFormatter;
+import org.example.deepshuffle.service.PlaylistVibeSessionService;
 import org.example.deepshuffle.service.SpotifyOAuthService;
 import org.example.deepshuffle.service.SpotifyPlaybackService;
 import org.example.deepshuffle.service.TelegramMessageService;
@@ -28,6 +29,7 @@ public class PlayPlaylistCallbackHandler implements CallbackHandler {
     private final PlaybackMessageFormatter messageFormatter;
     private final PlaybackKeyboardFactory keyboardFactory;
     private final PlaylistLookupService playlistLookupService;
+    private final PlaylistVibeSessionService vibeSessionService;
 
     @Override
     public boolean supports(String callback) {
@@ -41,6 +43,8 @@ public class PlayPlaylistCallbackHandler implements CallbackHandler {
         Long telegramUserId = update.getCallbackQuery().getFrom().getId();
         String playlistId = update.getCallbackQuery().getData().substring(CALLBACK_PREFIX.length());
         Playlist playlist = playlistLookupService.findPlaylistCard(playlistId);
+        boolean returnToVibeList = vibeSessionService.containsPlaylist(chatId, playlistId);
+        String backCallback = returnToVibeList ? "back:vibe_list" : "back:main";
 
         try {
             messageService.answerCallback(update.getCallbackQuery().getId(), "Starting Spotify playback");
@@ -48,7 +52,7 @@ public class PlayPlaylistCallbackHandler implements CallbackHandler {
                     chatId,
                     messageId,
                     messageFormatter.loading(playlist),
-                    keyboardFactory.loading(playlistId)
+                    keyboardFactory.loading(playlistId, backCallback)
             );
 
             SpotifyPlaybackResult result = playbackService.playPlaylist(telegramUserId, playlistId);
@@ -56,7 +60,7 @@ public class PlayPlaylistCallbackHandler implements CallbackHandler {
                     chatId,
                     messageId,
                     messageFormatter.success(result, playlist),
-                    keyboardFactory.success(result.playlistId())
+                    keyboardFactory.success(result.playlistId(), backCallback)
             );
         } catch (SpotifyAuthorizationRequiredException e) {
             String loginUrl = oauthService.generateLoginUrl(telegramUserId);
@@ -64,14 +68,14 @@ public class PlayPlaylistCallbackHandler implements CallbackHandler {
                     chatId,
                     messageId,
                     messageFormatter.authRequired(loginUrl),
-                    keyboardFactory.authRequired(loginUrl, playlistId)
+                    keyboardFactory.authRequired(loginUrl, playlistId, backCallback)
             );
         } catch (SpotifyPlaybackException e) {
             messageService.editMessage(
                     chatId,
                     messageId,
                     messageFormatter.failure(playlist, e),
-                    keyboardFactory.failure(playlistId)
+                    keyboardFactory.failure(playlistId, backCallback)
             );
         } catch (Exception e) {
             log.warn("Failed to start Spotify playback for Telegram user {}: {}", telegramUserId, e.getMessage());
@@ -79,7 +83,7 @@ public class PlayPlaylistCallbackHandler implements CallbackHandler {
                     chatId,
                     messageId,
                     messageFormatter.unexpectedFailure(playlist),
-                    keyboardFactory.failure(playlistId)
+                    keyboardFactory.failure(playlistId, backCallback)
             );
         }
     }

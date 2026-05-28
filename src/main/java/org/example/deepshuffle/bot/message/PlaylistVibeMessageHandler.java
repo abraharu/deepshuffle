@@ -1,9 +1,10 @@
 package org.example.deepshuffle.bot.message;
 
 import lombok.RequiredArgsConstructor;
-import org.example.deepshuffle.bot.keyboard.PlaylistChoiceKeyboardFactory;
+import org.example.deepshuffle.bot.keyboard.PlaylistVibeKeyboardFactory;
 import org.example.deepshuffle.bot.state.UserState;
 import org.example.deepshuffle.service.PlaylistVibeSearchService;
+import org.example.deepshuffle.service.PlaylistVibeSessionService;
 import org.example.deepshuffle.service.TelegramMessageService;
 import org.example.deepshuffle.service.UserStateService;
 import org.example.deepshuffle.spotify.dto.Playlist;
@@ -18,8 +19,9 @@ public class PlaylistVibeMessageHandler {
 
     private final UserStateService userStateService;
     private final PlaylistVibeSearchService playlistVibeSearchService;
+    private final PlaylistVibeSessionService sessionService;
     private final TelegramMessageService messageService;
-    private final PlaylistChoiceKeyboardFactory playlistChoiceKeyboardFactory;
+    private final PlaylistVibeKeyboardFactory keyboardFactory;
 
     public boolean supports(Update update) {
         if (!update.hasMessage() || !update.getMessage().hasText()) {
@@ -35,7 +37,6 @@ public class PlaylistVibeMessageHandler {
         String vibeText = update.getMessage().getText();
 
         List<Playlist> playlists = playlistVibeSearchService.searchPlaylistsByVibe(vibeText);
-
         if (playlists.isEmpty()) {
             messageService.sendMessage(
                     chatId,
@@ -45,31 +46,17 @@ public class PlaylistVibeMessageHandler {
         }
 
         userStateService.clearState(chatId);
+        String normalizedVibe = vibeText == null || vibeText.isBlank() ? "chill music" : vibeText.trim();
+        sessionService.save(chatId, normalizedVibe, playlists);
 
         messageService.sendMessage(
                 chatId,
-                "I found 5 playlist options. Open any of them in Spotify and play the one you want."
+                """
+                Playlist mood: %s
+
+                I found %d playlists. Tap one to open its details.
+                """.formatted(normalizedVibe, playlists.size()),
+                keyboardFactory.list(playlists)
         );
-
-        String normalizedVibe = vibeText == null ? "" : vibeText.trim();
-        for (int i = 0; i < playlists.size(); i++) {
-            Playlist playlist = playlists.get(i);
-            String ownerName = playlist.ownerName() == null || playlist.ownerName().isBlank()
-                    ? "Unknown curator"
-                    : playlist.ownerName();
-
-            String playlistMessage = """
-                    %d. %s
-                    Curator: %s
-                    Mood: %s
-                    """
-                    .formatted(i + 1, playlist.name(), ownerName, normalizedVibe);
-
-            messageService.sendMessage(
-                    chatId,
-                    playlistMessage,
-                    playlistChoiceKeyboardFactory.create(playlist)
-            );
-        }
     }
 }
